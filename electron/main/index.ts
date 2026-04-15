@@ -6,7 +6,20 @@ import os from 'node:os'
 import { cliService } from './cli-service'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const MAIN_DIST = path.join(__dirname, '../..')
+
+// 使用 app.getAppPath() 获取应用根目录（在打包后更可靠）
+function getAppRoot(): string {
+  // 在开发模式下，app.getAppPath() 返回项目根目录
+  // 在生产模式下，返回 app.asar 或 app 目录
+  const appPath = app.getAppPath()
+  // 如果在 asar 中，appPath 指向 app.asar 文件，需要取父目录
+  if (appPath.includes('app.asar')) {
+    return path.dirname(appPath)
+  }
+  return appPath
+}
+
+const MAIN_DIST = app.isPackaged ? getAppRoot() : path.join(__dirname, '../..')
 const RENDERER_DIST = path.join(MAIN_DIST, 'hermes_cli/web_dist')
 
 const IS_DEV = process.env.VITE_DEV_SERVER_URL || !app.isPackaged
@@ -43,6 +56,16 @@ function loadRuntimeAppIcon() {
 
 function createWindow() {
   const workAreaSize = screen.getPrimaryDisplay().workAreaSize
+
+  // 调试日志
+  console.log('=== Debug Info ===')
+  console.log('app.getAppPath():', app.getAppPath())
+  console.log('app.isPackaged:', app.isPackaged)
+  console.log('MAIN_DIST:', MAIN_DIST)
+  console.log('RENDERER_DIST:', RENDERER_DIST)
+  console.log('indexHtml:', indexHtml)
+  console.log('existsSync(indexHtml):', existsSync(indexHtml))
+  console.log('==================')
 
   const browserWindow = new BrowserWindow({
     title: 'Hermes Desktop',
