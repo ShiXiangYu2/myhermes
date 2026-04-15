@@ -33,8 +33,10 @@ class TestInterruptModule:
         set_interrupt(False)
 
         seen = {"value": False}
+        checker_tid = {"value": None}
 
         def _checker():
+            checker_tid["value"] = threading.current_thread().ident
             while not is_interrupted():
                 time.sleep(0.01)
             seen["value"] = True
@@ -42,10 +44,15 @@ class TestInterruptModule:
         t = threading.Thread(target=_checker, daemon=True)
         t.start()
 
+        # Wait for checker to start and record its thread ID
+        while checker_tid["value"] is None:
+            time.sleep(0.001)
+
         time.sleep(0.05)
         assert not seen["value"]
 
-        set_interrupt(True)
+        # Set interrupt for the specific checker thread
+        set_interrupt(True, checker_tid["value"])
         t.join(timeout=1)
         assert seen["value"]
 
