@@ -1,0 +1,20 @@
+{
+  "name": "hermes-desktop",
+  "version": "1.0.0",
+  "description": "Desktop GUI for Hermes Agent",
+  "main": "./dist/main/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "name": "hermes-agent",
+  "version": "1.0.0",
+  "description": "An AI agent with advanced tool-calling capabilities, featuring a flexible toolsets system for organizing and managing tools.",
+  "private": true,
+  "main": "dist-electron/main/index.js",
+  "scripts": {
+    "postinstall": "echo '✅ Browser tools ready. Run: python run_agent.py --help'",
+    "========== WEB UI ==========": "",
+    "web:dev": "cd web && npm run dev",
+    "web:build": "cd web && npm run build",
+    "========== ELECTRON ==========": "",
+    "electron:build": "cd electron && npm run build",
+    "electron:watch": "cd electron && npm run watch",
+    "========== DESKTOP (Vite + Electron) ==========": "",
+    "desktop:dev": "vite",
+    "desktop:build": "npm run web:build && npm run electron:build && electron-builder",
+    "desktop:preview": "vite preview",
+    "========== PACKAGING ==========": "",
+    "package:mac": "npm run web:build && npm run electron:build && electron-builder --mac",
+    "package:win": "npm run web:build && npm run electron:build && electron-builder --win",
+    "package:linux": "npm run web:build && npm run electron:build && electron-builder --linux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NousResearch/Hermes-Agent.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NousResearch/Hermes-Agent/issues"
+  },
+  "homepage": "https://github.com/NousResearch/Hermes-Agent#readme",
+  "dependencies": {
+    "agent-browser": "^0.13.0",
+    "@askjo/camoufox-browser": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.0",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  },
+  "overrides": {
+    "lodash": "4.18.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "build": {
+    "appId": "com.nousresearch.hermes-desktop",
+    "productName": "Hermes Desktop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist-web/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".",
+        "to": "hermes-agent",
+        "filter": [
+          "agent/**/*",
+          "gateway/**/*",
+          "skills/**/*",
+          "tools/**/*",
+          "*.py",
+          "pyproject.toml",
+          "uv.lock"
+        ]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ]
+    }
+  }
+}
