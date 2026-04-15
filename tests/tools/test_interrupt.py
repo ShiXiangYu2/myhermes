@@ -185,8 +185,10 @@ class TestSIGKILLEscalation:
 
         # Start execution in a thread, interrupt after 0.5s
         result_holder = {"value": None}
+        runner_tid = {"value": None}
 
         def _run():
+            runner_tid["value"] = threading.current_thread().ident
             result_holder["value"] = env.execute(
                 "trap '' TERM; sleep 60",
                 timeout=30,
@@ -195,8 +197,13 @@ class TestSIGKILLEscalation:
         t = threading.Thread(target=_run)
         t.start()
 
+        # Wait for runner thread to start and record its TID
+        while runner_tid["value"] is None:
+            time.sleep(0.001)
+
         time.sleep(0.5)
-        set_interrupt(True)
+        # Set interrupt for the specific runner thread
+        set_interrupt(True, runner_tid["value"])
 
         t.join(timeout=5)
         set_interrupt(False)

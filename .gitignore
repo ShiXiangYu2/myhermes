@@ -62,3 +62,9 @@ mini-swe-agent/
 .direnv/
 result
 website/static/api/skills-index.json
+
+# Build artifacts
+dist/
+*.dmg
+*.app
+Electron Framework
