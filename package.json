@@ -57,7 +57,7 @@
       "buildResources": "build"
     },
     "files": [
-      "dist-web/**/*",
+      "hermes_cli/web_dist/**/*",
       "dist-electron/**/*",
       "package.json"
     ],

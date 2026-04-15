@@ -7,7 +7,7 @@ import { cliService } from './cli-service'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const MAIN_DIST = path.join(__dirname, '../..')
-const RENDERER_DIST = path.join(MAIN_DIST, 'dist-web')
+const RENDERER_DIST = path.join(MAIN_DIST, 'hermes_cli/web_dist')
 
 const IS_DEV = process.env.VITE_DEV_SERVER_URL || !app.isPackaged
 process.env.VITE_PUBLIC = IS_DEV
